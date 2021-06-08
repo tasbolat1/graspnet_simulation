@@ -6,7 +6,8 @@ import numpy as np
 import time
 import yaml
 import pickle
-import tf
+# import tf
+from scipy.spatial.transform import Rotation as R
 import time
 
 from pointcloud.pointcloud import PointCloud
@@ -70,40 +71,6 @@ class PyBulletSim:
         return self.sim_id, grasp_outcome, score
 
 
-    def load_grippers(self, grasp, score, x=3, y=3):
-        x = int(x/2)
-        y = int(y/2)
-        for i in range(-x,x+1):
-            for j in range(-y,y+1):
-                # self.execute_grasp(grasp, score, p_end=[i,j,0])
-                p_end=[i,j,0] 
-                # parse grasp
-                trans = grasp[:3,3]
-                q = tf.transformations.quaternion_from_matrix(grasp)
-                
-                # transformation between grasp and down looking gripper 
-                p_start = trans
-                q_start = q
-                p_end = p_end
-                q_end = [0,1,0,0]
-                p_trans,q_trans = self.p.multiplyTransforms(p_start,q_start,p_end,q_end)
-
-                # convert object to new transform
-                p_obj = [0,0,0]
-                q_obj = [0,0,0,1]
-                p_inv, q_inv = self.p.invertTransform(p_trans,q_trans)
-                p_new, q_new = self.p.multiplyTransforms( p_inv, q_inv, p_obj,q_obj)
-
-
-                # load gripper
-                self.load_gripper(q=q_end, gripper_start_position=p_end)
-
-
-
-
-
-
-
     def generate_pc(self, save_dir='temp/pc.npy'):
         pc = PointCloud()
         #pc.stepX = 5
@@ -117,7 +84,8 @@ class PyBulletSim:
         
         # parse grasp
         trans = grasp[:3,3]
-        q = tf.transformations.quaternion_from_matrix(grasp)
+        #q = tf.transformations.quaternion_from_matrix(grasp)
+        q = R.from_matrix(grasp[:3,:3]).as_quat()
         
         # transformation between grasp and down looking gripper 
         p_start = trans
