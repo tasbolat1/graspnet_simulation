@@ -1,0 +1,30 @@
+sugar_box:
+  id: 0
+  path: assets/10_objects/004_sugar_box/google_16k/textured.obj
+mustard_bottle:
+  id: 1
+  path: assets/10_objects/006_mustard_bottle/google_16k/textured_vhacd.obj
+banana:
+  id: 2
+  path: assets/10_objects/011_banana/google_16k/textured_vhacd.obj
+lemon:
+  id: 3
+  path: assets/10_objects/014_lemon/google_16k/textured_vhacd.obj
+red_bowl:
+  id: 4
+  path: assets/10_objects/024_bowl/google_16k/textured_vhacd.obj
+red_mug:
+  id: 5
+  path: assets/10_objects/025_mug/google_16k/textured_vhacd.obj
+sponge:
+  id: 6
+  path: assets/10_objects/026_sponge/google_16k/textured.obj
+foam_brick:
+  id: 7
+  path: assets/10_objects/061_foam_brick/google_16k/textured.obj
+blue_cup:
+  id: 8
+  path: assets/10_objects/065_j_cups/google_16k/textured_vhacd.obj
+coffee_can:
+  id: 9
+  path: assets/10_objects/coffee_can/coffee_can.obj

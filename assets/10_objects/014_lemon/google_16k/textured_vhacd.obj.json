@@ -1,0 +1,9 @@
+{
+  "primitives": [{
+    "position": [-0.010578500106930731, 0.022006500279530883, 0.025939499289961532],
+    "type": "box",
+    "orientation": [0, 0, 0],
+    "dimensions": [0.03058749996125698, 0.029697500402107835, 0.02646849930169992]
+  }],
+  "target": "/home/crslab/pybullet_tests/graspGripper2/assets/10_objects/014_lemon/google_16k/textured.obj"
+}
