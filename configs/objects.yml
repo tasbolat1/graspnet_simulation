@@ -25,6 +25,3 @@ foam_brick:
 blue_cup:
   id: 8
   path: assets/10_objects/065_j_cups/google_16k/textured_vhacd.obj
-coffee_can:
-  id: 9
-  path: assets/10_objects/coffee_can/coffee_can.obj

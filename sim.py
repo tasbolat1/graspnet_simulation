@@ -39,7 +39,7 @@ class PyBulletSim:
 
         
         # loading objects
-        self.objects_containers = yaml.load(open('configs/objects.yml'))
+        self.objects_containers = yaml.safe_load(open('configs/objects.yml'))
 
         # define robot joints
         self.rb_revolute_id = 0
@@ -71,13 +71,14 @@ class PyBulletSim:
         return self.sim_id, grasp_outcome, score
 
 
-    def generate_pc(self, save_dir='temp/pc.npy'):
+    def generate_pc(self, obj_name=None, save_dir='temp/pc.npy'):
         pc = PointCloud()
-        #pc.stepX = 5
-        #pc.stepY = 5
+        self.obj_id = self.load_object(self.obj_name, mass=0.00)
+        self.step_simulation(100)
         pc.setCamera(cameraDistance=0.6, cameraYaw=40, cameraPitch=-25, cameraTargetPosition=[0,0.1,0])
         a = pc.generatePointCloud( verbose=True)
         pc.save(save_dir)
+        #self.p.disconnect()
 
 
     def execute_grasp(self, grasp, p_end=[0,0,0]):
