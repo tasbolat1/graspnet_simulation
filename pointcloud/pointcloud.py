@@ -4,41 +4,42 @@ import numpy as np
 import time
 
 class PointCloud:
-    """
-    PointCloud: Synthetic point cloud generator based on fake camera location
-    """
-    def __init__(self):
-    	# TODO
-    	self.file_dir = 'pc.npy'
-    	# larger step size results sparse point cloud
-    	self.stepX = 1
-    	self.stepY = 1
+	"""
+	PointCloud: Synthetic point cloud generator based on fake camera location
+	"""
+	def __init__(self):
+		# TODO
+		self.file_dir = 'pc.npy'
+		# larger step size results sparse point cloud
+		self.stepX = 1
+		self.stepY = 1
 
-    	# depth distortion correction params
-    	self.farPlane = 10000
+		# depth distortion correction params
+		self.farPlane = 10000
 
-    	# depth threshold
-    	self.depth_threshold_x = 4 # m
-    	self.depth_threshold_y = 4 # m
-    	self.depth_threshold_z = 4 # m
-    	self.pointcloud = []
+		# depth threshold
+		self.depth_threshold_x = 4 # m
+		self.depth_threshold_y = 4 # m
+		self.depth_threshold_z = 4 # m
+		self.pointcloud = []
 
-    def save(self, save_dir='pc.npy'):
-    	print('here')
-    	if len(self.pointcloud) == 0:
-    		print('No pointcloud tp save.')
-    		return
+	def save(self, save_dir='pc.npy'):
+		print('here')
+		if len(self.pointcloud) == 0:
+			print('No pointcloud tp save.')
+			return
 
-    	np.save(open(save_dir, 'wb'), self.pointcloud)
-    	print('saved at ', save_dir)
+		np.save(open(save_dir, 'wb'), self.pointcloud)
 
-    def getRayFromTo(self, mouseX, mouseY):
-		width, height, viewMat, projMat, cameraUp, camForward, horizon, vertical, _, _, dist, camTarget = p.getDebugVisualizerCamera(
-		)
-		camPos = [
-		  camTarget[0] - dist * camForward[0], camTarget[1] - dist * camForward[1],
-		  camTarget[2] - dist * camForward[2]
-		]
+		print('saved at ', save_dir)
+
+
+	def getRayFromTo(self, mouseX, mouseY):
+		width, height, viewMat, projMat, cameraUp, camForward, horizon, vertical, _, _, dist, camTarget = p.getDebugVisualizerCamera()
+		camPos = [camTarget[0] - dist * camForward[0],
+					camTarget[1] - dist * camForward[1],
+					camTarget[2] - dist * camForward[2]
+				 ]
 
 
 		rayForward = [(camTarget[0] - camPos[0]), (camTarget[1] - camPos[1]), (camTarget[2] - camPos[2])]
@@ -69,34 +70,34 @@ class PointCloud:
 		alpha = math.atan(lenOrtho / self.farPlane)
 		return rayFrom, rayTo, alpha
 
-    def setCamera(self, cameraDistance=0.3, cameraYaw=50, cameraPitch=-25, cameraTargetPosition=[0,0.1,0]):
-    	p.resetDebugVisualizerCamera(cameraDistance=cameraDistance,
-    								 cameraYaw=cameraYaw,
-    								 cameraPitch=cameraPitch,
-    								 cameraTargetPosition=cameraTargetPosition)
-    	p.stepSimulation() # this is required to update the scene
-    	time.sleep(1)
+	def setCamera(self, cameraDistance=0.3, cameraYaw=50, cameraPitch=-25, cameraTargetPosition=[0,0.1,0]):
+		p.resetDebugVisualizerCamera(cameraDistance=cameraDistance,
+									cameraYaw=cameraYaw,
+									cameraPitch=cameraPitch,
+									cameraTargetPosition=cameraTargetPosition)
+		p.stepSimulation() # this is required to update the scene
+		time.sleep(1)
 
-    def generatePointCloud(self, verbose=False):
-    	width, height, viewMat, projMat, cameraUp, camForward, horizon, vertical, _, _, dist, camTarget = p.getDebugVisualizerCamera()
-    	camPos = [
-    		camTarget[0] - dist * camForward[0],
-    		camTarget[1] - dist * camForward[1],
-    		camTarget[2] - dist * camForward[2] 
-    		]
+	def generatePointCloud(self, verbose=False):
+		width, height, viewMat, projMat, cameraUp, camForward, horizon, vertical, _, _, dist, camTarget = p.getDebugVisualizerCamera()
+		camPos = [
+			camTarget[0] - dist * camForward[0],
+			camTarget[1] - dist * camForward[1],
+			camTarget[2] - dist * camForward[2] 
+			]
 
-    	imgW = int(width / self.stepX)
-    	imgH = int(height / self.stepY)
+		imgW = int(width / self.stepX)
+		imgH = int(height / self.stepY)
 
-    	img = p.getCameraImage(imgW, imgH, renderer=p.ER_BULLET_HARDWARE_OPENGL)
-    	rgbBuffer = img[2]
-    	depthBuffer = img[3]
+		img = p.getCameraImage(imgW, imgH, renderer=p.ER_BULLET_HARDWARE_OPENGL)
+		rgbBuffer = img[2]
+		depthBuffer = img[3]
 
 
-    	if verbose:
-    		print('camTarget: ', camTarget)
-    		print("rgbBuffer.shape=", rgbBuffer.shape)
-    		print("depthBuffer.shape=", depthBuffer.shape)
+		if verbose:
+			print('camTarget: ', camTarget)
+			print("rgbBuffer.shape=", rgbBuffer.shape)
+			print("depthBuffer.shape=", depthBuffer.shape)
 
 		self.pointcloud = []
 		for w in range(0, imgW, self.stepX):
